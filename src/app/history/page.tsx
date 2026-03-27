@@ -67,12 +67,12 @@ export default function HistoryPage() {
 
   const getBadgeVariant = (level: string) => {
     switch (level) {
-      case 'High':
+      case 'Nhóm Khách hàng Tự hành':
         return 'success';
-      case 'Medium':
+      case 'Nhóm Trọng tâm Tăng trưởng':
         return 'warning';
-      case 'Low':
-        return 'danger';
+      case 'Nhóm Tối ưu Hóa Chi phí':
+        return 'default';
       default:
         return 'default';
     }
@@ -257,9 +257,9 @@ export default function HistoryPage() {
           </Card>
           <Card>
             <CardContent className="p-4">
-              <p className="text-sm text-gray-500">Tiềm năng Cao</p>
+              <p className="text-sm text-gray-500">Tiềm năng Cao (Tự hành)</p>
               <p className="text-2xl font-bold text-primary-600">
-                {predictions.filter((p) => p.potential_level === 'High').length}
+                {predictions.filter((p) => p.potential_level === 'Nhóm Khách hàng Tự hành').length}
               </p>
             </CardContent>
           </Card>

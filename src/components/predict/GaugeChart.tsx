@@ -56,7 +56,7 @@ export function GaugeChart({ value, size = 200 }: GaugeChartProps) {
       </div>
 
       {/* Scale labels */}
-      <div className="absolute bottom-0 left-0 right-0 flex justify-between px-4 text-xs text-gray-400">
+      <div className="absolute -bottom-4 left-0 right-0 flex justify-between px-4 text-xs text-gray-400">
         <span>0%</span>
         <span>50%</span>
         <span>100%</span>

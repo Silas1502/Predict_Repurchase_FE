@@ -2,26 +2,27 @@
 // Backend: backend/app/schemas.py
 
 // ==========================================
-// 1. TRANSACTION TYPES - Input Data
+// 1. TRANSACTION TYPES - Input Data (Online Retail Format)
 // ==========================================
 
-/** Một dòng giao dịch (order_item) - từ database */
+/** Một dòng giao dịch (order) - Online Retail data format */
 export interface Transaction {
   order_id: string;
-  product_id: string;
-  category_en: string;
-  review_score: number;
-  customer_state: string;
-  is_total_order: number;
-  is_valid_order: number;
-  valid_spend_capped: number;
-  order_purchase_timestamp: string;
+  total_items: number;
+  log_items: number;
+  order_date: string;
+  order_value: number;
+  canceled_value: number;
+  order_n_categories: number;
+  order_n_lines: number;
+  is_canceled: number;
+  country: string;
 }
 
 /** Request cho POST /predict */
 export interface PredictRequest {
   customer_info: {
-    customer_unique_id: string;
+    customer_id: string;
     snapshot_date: string;
   };
   transactions: Transaction[];
@@ -30,14 +31,15 @@ export interface PredictRequest {
 /** Raw transaction từ GET /customers/{id}/history */
 export interface RawTransaction {
   order_id: string;
-  product_id: string;
-  category_en: string;
-  review_score: number;
-  customer_state: string;
-  is_total_order: number;
-  is_valid_order: number;
-  valid_spend_capped: number;
-  order_purchase_timestamp: string;
+  total_items: number;
+  log_items: number;
+  order_date: string;
+  order_value: number;
+  canceled_value: number;
+  order_n_categories: number;
+  order_n_lines: number;
+  is_canceled: number;
+  country: string;
 }
 
 // ==========================================
@@ -59,7 +61,7 @@ export interface PredictResponse {
   probability: number;           // 0-1
   probability_percent: number;     // 0-100
   is_repurchase: boolean;
-  potential_level: 'High' | 'Medium' | 'Low';
+  potential_level: 'Nhóm Khách hàng Tự hành' | 'Nhóm Trọng tâm Tăng trưởng' | 'Nhóm Tối ưu Hóa Chi phí';
   threshold_used: number;
   top_reasons: TopReason[];
   prediction_id?: string;
@@ -80,7 +82,7 @@ export interface ApplicationLog {
   customer_id: string;
   probability: number;
   is_repurchase: boolean;
-  potential_level: 'High' | 'Medium' | 'Low';
+  potential_level: 'Nhóm Khách hàng Tự hành' | 'Nhóm Trọng tâm Tăng trưởng' | 'Nhóm Tối ưu Hóa Chi phí';
   created_at: string;
 }
 
@@ -148,7 +150,7 @@ export interface PredictionData {
   probability: number;
   probability_percent?: number;
   is_repurchase: boolean;
-  potential_level: 'High' | 'Medium' | 'Low';
+  potential_level: 'Nhóm Khách hàng Tự hành' | 'Nhóm Trọng tâm Tăng trưởng' | 'Nhóm Tối ưu Hóa Chi phí';
   top_reasons?: TopReason[];
   threshold_used?: number;
   prediction_id?: string;

@@ -48,12 +48,12 @@ export function PredictResult({ result, isLoading }: PredictResultProps) {
   // Get badge variant based on potential level
   const getBadgeVariant = (level: string) => {
     switch (level) {
-      case 'High':
+      case 'Nhóm Khách hàng Tự hành':
         return 'success';
-      case 'Medium':
+      case 'Nhóm Trọng tâm Tăng trưởng':
         return 'warning';
-      case 'Low':
-        return 'danger';
+      case 'Nhóm Tối ưu Hóa Chi phí':
+        return 'default';
       default:
         return 'default';
     }
@@ -98,7 +98,9 @@ export function PredictResult({ result, isLoading }: PredictResultProps) {
         <div className="flex justify-center">
           <Badge variant={getBadgeVariant(potential_level)} size="md">
             <TrendingUp className="w-4 h-4 mr-1" />
-            Tiềm năng {potential_level === 'High' ? 'Cao' : potential_level === 'Medium' ? 'Trung bình' : 'Thấp'}
+            {potential_level === 'Nhóm Khách hàng Tự hành' ? 'Tự hành - Khách VIP' : 
+             potential_level === 'Nhóm Trọng tâm Tăng trưởng' ? 'Tăng trưởng - Cần đẩy mạnh' : 
+             'Tối ưu Chi phí - Không nên đầu tư'}
           </Badge>
         </div>
 
@@ -121,9 +123,6 @@ export function PredictResult({ result, isLoading }: PredictResultProps) {
                     <div>
                       <p className="font-medium text-gray-900">
                         {formatFeatureName(reason.feature)}
-                      </p>
-                      <p className="text-xs text-gray-500">
-                        Giá trị: {reason.value}
                       </p>
                     </div>
                   </div>
