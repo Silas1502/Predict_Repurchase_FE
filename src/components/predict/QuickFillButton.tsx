@@ -32,14 +32,15 @@ export function QuickFillButton({ onFill, disabled }: QuickFillButtonProps) {
         // Transform raw transactions to Transaction type
         const transactions: Transaction[] = response.transactions.map((raw) => ({
           order_id: raw.order_id,
-          product_id: raw.product_id,
-          category_en: raw.category_en,
-          review_score: raw.review_score,
-          customer_state: raw.customer_state,
-          is_total_order: raw.is_total_order,
-          is_valid_order: raw.is_valid_order,
-          valid_spend_capped: raw.valid_spend_capped,
-          order_purchase_timestamp: raw.order_purchase_timestamp,
+          total_items: raw.total_items,
+          log_items: raw.log_items,
+          order_date: raw.order_date,
+          order_value: raw.order_value,
+          canceled_value: raw.canceled_value,
+          order_n_categories: raw.order_n_categories,
+          order_n_lines: raw.order_n_lines,
+          is_canceled: raw.is_canceled,
+          country: raw.country,
         }));
         onFill(transactions);
         setError('');
