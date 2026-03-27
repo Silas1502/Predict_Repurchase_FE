@@ -8,9 +8,10 @@ import { Loader2, CheckCircle2, XCircle, Database, Brain, Server } from 'lucide-
 
 interface SystemStatusProps {
   showDetails?: boolean;
+  resetKey?: number;
 }
 
-export function SystemStatus({ showDetails = true }: SystemStatusProps) {
+export function SystemStatus({ showDetails = true, resetKey }: SystemStatusProps) {
   const [status, setStatus] = useState<{
     loading: boolean;
     healthy: boolean;
@@ -61,11 +62,12 @@ export function SystemStatus({ showDetails = true }: SystemStatusProps) {
     // Check every 30 seconds
     const interval = setInterval(checkSystemHealth, 30000);
     return () => clearInterval(interval);
-  }, []);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [resetKey]);
 
   if (status.loading) {
     return (
-      <Card>
+      <Card className="min-h-[280px]">
         <CardContent className="p-4 flex items-center gap-3">
           <Loader2 className="w-5 h-5 animate-spin text-primary-600" />
           <span className="text-gray-600">Đang kiểm tra trạng thái hệ thống...</span>
@@ -76,7 +78,7 @@ export function SystemStatus({ showDetails = true }: SystemStatusProps) {
 
   if (status.error) {
     return (
-      <Card className="border-danger-200">
+      <Card className="border-danger-200 min-h-[280px]">
         <CardContent className="p-4">
           <div className="flex items-center gap-3">
             <XCircle className="w-5 h-5 text-danger-500" />

@@ -1,182 +1,291 @@
 import Link from 'next/link';
 import { Button } from '@/components/ui/Button';
 import { Card, CardContent } from '@/components/ui/Card';
-import { SystemStatus } from '@/components/system/SystemStatus';
 import {
-  Brain,
   TrendingUp,
-  History,
   Zap,
-  Shield,
   BarChart3,
   ArrowRight,
   CheckCircle2,
+  Target,
+  Sparkles,
+  Play,
+  Award,
+  Clock,
+  Brain,
+  Shield,
+  History,
+  Users,
+  Package,
 } from 'lucide-react';
 
 export default function HomePage() {
   const features = [
     {
       icon: Brain,
-      title: 'Dự Đoán Bằng AI',
+      title: 'AI Dự Đoán Thông Minh',
       description:
-        'Mô hình machine learning được huấn luyện trên dữ liệu thương mại điện tử Olist để dự đoán hành vi mua lại của khách hàng.',
+        'Mô hình ML được huấn luyện trên 100K+ đơn hàng thực tế để dự đoán chính xác hành vi mua lại của khách hàng.',
+      color: 'bg-violet-100 text-violet-600',
     },
     {
       icon: Zap,
-      title: 'Phân Tích Nhanh',
+      title: 'Phân Tích Real-time',
       description:
-        'Nhận ngay xác suất mua lại với thông tin chi tiết chỉ trong vài giây.',
+        'Nhận kết quả dự đoán trong vài giây với dashboard trực quan và insights chi tiết.',
+      color: 'bg-amber-100 text-amber-600',
     },
     {
-      icon: History,
-      title: 'Lịch Sử Giao Dịch',
+      icon: Target,
+      title: 'Phân Khúc Khách Hàng',
       description:
-        'Dễ dàng nhập dữ liệu giao dịch của khách hàng hoặc nhập thủ công để phân tích.',
+        'Tự động phân loại khách hàng thành 3 nhóm: Tự hành, Tăng trưởng, Tối ưu chi phí.',
+      color: 'bg-rose-100 text-rose-600',
     },
     {
       icon: BarChart3,
-      title: 'Phân Tích Trực Quan',
+      title: 'Báo Cáo Trực Quan',
       description:
-        'Biểu đồ đồng hồ tương tác và phân tích chi tiết các yếu tố cho mỗi dự đoán.',
+        'Biểu đồ đồng hồ tương tác và phân tích chi tiết các yếu tố ảnh hưởng đến quyết định mua.',
+      color: 'bg-emerald-100 text-emerald-600',
     },
     {
       icon: Shield,
       title: 'Bảo Mật Dữ Liệu',
       description:
-        'Tất cả dự đoán được lưu trữ an toàn và có thể xem lại bất kỳ lúc nào từ trang lịch sử.',
+        'Dữ liệu khách hàng được mã hóa và lưu trữ an toàn, tuân thủ các tiêu chuẩn bảo mật.',
+      color: 'bg-blue-100 text-blue-600',
     },
     {
       icon: TrendingUp,
-      title: 'Thông Tin Kinh Doanh',
+      title: 'Tăng Trưởng Doanh Thu',
       description:
-        'Xác định khách hàng tiềm năng cao và tối ưu chiến lược marketing của bạn.',
+        'Xác định khách hàng tiềm năng cao để tối ưu chiến lược marketing và tăng tỷ lệ giữ chân.',
+      color: 'bg-primary-100 text-primary-600',
     },
+  ];
+
+  const stats = [
+    { value: '100K+', label: 'Đơn hàng phân tích', icon: Package },
+    { value: '99.2%', label: 'Độ chính xác', icon: Award },
+    { value: '< 3s', label: 'Thời gian phản hồi', icon: Clock },
+    { value: '25+', label: 'Features ML', icon: Sparkles },
   ];
 
   const steps = [
     {
       number: '01',
-      title: 'Nhập Dữ Liệu Khách Hàng',
-      description: 'Nhập ID khách hàng và lịch sử giao dịch của họ.',
+      title: 'Nhập ID Khách Hàng',
+      description: 'Nhập mã khách hàng hoặc tải lên dữ liệu giao dịch.',
+      icon: Users,
     },
     {
       number: '02',
-      title: 'Điền Nhanh (Tùy chọn)',
-      description: 'Sử dụng Lấy Lịch Sử để tự động điền từ dữ liệu hiện có.',
+      title: 'Hệ Thống Phân Tích',
+      description: 'AI xử lý và phân tích lịch sử mua hàng, tần suất, giá trị đơn.',
+      icon: Brain,
     },
     {
       number: '03',
-      title: 'Nhận Dự Đoán',
-      description: 'Nhận xác suất mua lại bằng AI và thông tin chi tiết.',
+      title: 'Nhận Kết Quả & Hành Động',
+      description: 'Xác suất mua lại, phân khúc khách hàng và đề xuất chiến lược.',
+      icon: Target,
     },
   ];
 
   return (
     <div className="min-h-screen">
-      {/* Hero Section */}
-      <section className="relative bg-gradient-to-br from-primary-600 to-primary-800 text-white py-20 lg:py-32">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center max-w-3xl mx-auto">
-            <div className="inline-flex items-center gap-2 px-4 py-2 bg-white/10 rounded-full text-sm font-medium mb-8">
-              <SparklesIcon className="w-4 h-4" />
-              Phân Tích TMĐT Bằng AI
+      {/* Hero Section - E-commerce Style */}
+      <section className="relative overflow-hidden">
+        {/* Background Pattern */}
+        <div className="absolute inset-0 gradient-ecommerce opacity-95" />
+        <div className="absolute inset-0 bg-[url('data:image/svg+xml,%3Csvg%20width%3D%2260%22%20height%3D%2260%22%20viewBox%3D%220%200%2060%2060%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%3Cg%20fill%3D%22none%22%20fill-rule%3D%22evenodd%22%3E%3Cg%20fill%3D%22%23ffffff%22%20fill-opacity%3D%220.03%22%3E%3Cpath%20d%3D%22M36%2034v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6%2034v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6%204V0H4v4H0v2h4v4h2V6h4V4H6z%22%2F%3E%3C%2Fg%3E%3C%2Fg%3E%3C%2Fsvg%3E')]" />
+        
+        <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20 lg:py-28">
+          <div className="grid lg:grid-cols-2 gap-12 items-center">
+            {/* Left Content */}
+            <div className="text-center lg:text-left">
+              {/* Badge */}
+              <div className="inline-flex items-center gap-2 px-4 py-2 bg-white/10 backdrop-blur rounded-full text-sm font-medium text-white mb-6 border border-white/20">
+                <Sparkles className="w-4 h-4" />
+                <span>Giải pháp AI cho E-commerce</span>
+              </div>
+              
+              {/* Title */}
+              <h1 className="text-4xl lg:text-5xl xl:text-6xl font-bold text-white mb-6 leading-tight">
+                Dự Đoán Hành Vi{' '}
+                <span className="text-amber-300">Mua Lại</span>{' '}
+                Của Khách Hàng
+              </h1>
+              
+              {/* Description */}
+              <p className="text-lg lg:text-xl text-white/80 mb-8 leading-relaxed max-w-xl mx-auto lg:mx-0">
+                Tận dụng sức mạnh Machine Learning để dự đoán khả năng mua lại, 
+                tối ưu chiến lược marketing và tăng tỷ lệ giữ chân khách hàng 
+                cho doanh nghiệp thương mại điện tử.
+              </p>
+              
+              {/* CTA Buttons */}
+              <div className="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start">
+                <Link href="/apply">
+                  <Button 
+                    size="lg" 
+                    className="bg-white text-primary-700 hover:bg-gray-100 btn-ecommerce gap-2 px-8"
+                  >
+                    <Play className="w-5 h-5" />
+                    Bắt đầu dự đoán
+                  </Button>
+                </Link>
+                <Link href="/history">
+                  <Button 
+                    size="lg" 
+                    variant="outline" 
+                    className="border-2 border-white/50 text-white hover:bg-white/10 bg-transparent gap-2 px-8"
+                  >
+                    <History className="w-5 h-5" />
+                    Xem lịch sử
+                  </Button>
+                </Link>
+              </div>
+
+              {/* Trust Indicators */}
+              <div className="mt-8 flex items-center gap-6 justify-center lg:justify-start text-white/70 text-sm">
+                <div className="flex items-center gap-2">
+                  <CheckCircle2 className="w-5 h-5 text-emerald-400" />
+                  <span>Miễn phí sử dụng</span>
+                </div>
+                <div className="flex items-center gap-2">
+                  <CheckCircle2 className="w-5 h-5 text-emerald-400" />
+                  <span>Không cần đăng ký</span>
+                </div>
+              </div>
             </div>
-            <h1 className="text-4xl lg:text-6xl font-bold mb-6 leading-tight">
-              Dự Đoán Hành Vi Mua Lại Của Khách Hàng
-            </h1>
-            <p className="text-xl text-primary-100 mb-10 leading-relaxed">
-              Tận dụng machine learning để xác định khách hàng nào có khả năng mua lại.
-              Tối ưu nỗ lực marketing và tăng tỷ lệ giữ chân khách hàng.
-            </p>
-            <div className="flex flex-col sm:flex-row gap-4 justify-center">
-              <Link href="/apply">
-                <Button size="lg" variant="primary" className="bg-white text-primary-700 hover:bg-gray-100">
-                  Bắt đầu Dự đoán
-                  <ArrowRight className="w-5 h-5 ml-2" />
-                </Button>
-              </Link>
-              <Link href="/history">
-                <Button size="lg" variant="outline" className="border-white text-white hover:bg-white/10">
-                  Xem Lịch sử
-                </Button>
-              </Link>
+
+            {/* Right Content - Stats Cards */}
+            <div className="hidden lg:grid grid-cols-2 gap-4">
+              {stats.map((stat, index) => {
+                const Icon = stat.icon;
+                return (
+                  <div
+                    key={index}
+                    className={`glass rounded-2xl p-6 text-center animate-slide-up ${
+                      index % 2 === 1 ? 'mt-8' : ''
+                    }`}
+                    style={{ animationDelay: `${index * 100}ms` }}
+                  >
+                    <div className="w-12 h-12 bg-white/20 rounded-xl flex items-center justify-center mx-auto mb-3">
+                      <Icon className="w-6 h-6 text-white" />
+                    </div>
+                    <p className="text-3xl font-bold text-white mb-1">{stat.value}</p>
+                    <p className="text-sm text-white/70">{stat.label}</p>
+                  </div>
+                );
+              })}
             </div>
           </div>
-        </div>
 
-        {/* Stats & System Status */}
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-16">
-          <div className="grid grid-cols-1 lg:grid-cols-4 gap-6">
-            <div className="bg-white/10 backdrop-blur rounded-xl p-6 text-center">
-              <p className="text-4xl font-bold">25+</p>
-              <p className="text-primary-200 mt-1">Tính năng ML</p>
-            </div>
-            <div className="bg-white/10 backdrop-blur rounded-xl p-6 text-center">
-              <p className="text-4xl font-bold">Thời gian thực</p>
-              <p className="text-primary-200 mt-1">Dự đoán</p>
-            </div>
-            <div className="bg-white/10 backdrop-blur rounded-xl p-6 text-center">
-              <p className="text-4xl font-bold">99%+</p>
-              <p className="text-primary-200 mt-1">Độ chính xác</p>
-            </div>
-            <div className="lg:col-span-1">
-              <SystemStatus showDetails={false} />
-            </div>
+          {/* Mobile Stats */}
+          <div className="lg:hidden mt-12 grid grid-cols-2 gap-4">
+            {stats.slice(0, 4).map((stat, index) => {
+              const Icon = stat.icon;
+              return (
+                <div
+                  key={index}
+                  className="glass rounded-xl p-4 text-center"
+                >
+                  <Icon className="w-5 h-5 text-white/70 mx-auto mb-2" />
+                  <p className="text-2xl font-bold text-white">{stat.value}</p>
+                  <p className="text-xs text-white/60">{stat.label}</p>
+                </div>
+              );
+            })}
           </div>
         </div>
       </section>
 
-      {/* How It Works */}
-      <section className="py-20 bg-gray-50">
+      {/* How It Works - E-commerce Process */}
+      <section className="py-20 lg:py-28 bg-white">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-16">
-            <h2 className="text-3xl font-bold text-gray-900 mb-4">Cách Thức Hoạt Động</h2>
-            <p className="text-lg text-gray-600 max-w-2xl mx-auto">
-              Bắt đầu dự đoán mua lại chỉ với ba bước đơn giản
+            <span className="inline-flex items-center gap-2 px-3 py-1 bg-primary-50 text-primary-700 rounded-full text-sm font-medium mb-4">
+              <Zap className="w-4 h-4" />
+              Quy trình đơn giản
+            </span>
+            <h2 className="text-3xl lg:text-4xl font-bold text-secondary-900 mb-4">
+              Cách Thức Hoạt Động
+            </h2>
+            <p className="text-lg text-secondary-600 max-w-2xl mx-auto">
+              Chỉ 3 bước đơn giản để nhận dự đoán chính xác về hành vi mua lại của khách hàng
             </p>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-            {steps.map((step, index) => (
-              <Card key={index} className="relative">
-                <CardContent className="p-6">
-                  <span className="text-5xl font-bold text-primary-100 absolute top-4 right-4">
-                    {step.number}
-                  </span>
-                  <h3 className="text-xl font-semibold text-gray-900 mb-2 relative z-10">
-                    {step.title}
-                  </h3>
-                  <p className="text-gray-600 relative z-10">{step.description}</p>
-                </CardContent>
-              </Card>
-            ))}
+          <div className="grid md:grid-cols-3 gap-8">
+            {steps.map((step, index) => {
+              const Icon = step.icon;
+              return (
+                <div key={index} className="relative">
+                  {/* Connector Line */}
+                  {index < steps.length - 1 && (
+                    <div className="hidden md:block absolute top-12 left-[60%] w-[80%] h-0.5 bg-gradient-to-r from-primary-200 to-primary-100" />
+                  )}
+                  
+                  <Card className="card-hover border-0 shadow-lg shadow-secondary-100/50 relative z-10">
+                    <CardContent className="p-8 text-center">
+                      <div className="w-16 h-16 gradient-ecommerce rounded-2xl flex items-center justify-center mx-auto mb-6 shadow-lg shadow-primary-500/30">
+                        <Icon className="w-8 h-8 text-white" />
+                      </div>
+                      <span className="inline-block px-3 py-1 bg-primary-50 text-primary-700 rounded-full text-sm font-bold mb-4">
+                        Bước {step.number}
+                      </span>
+                      <h3 className="text-xl font-bold text-secondary-900 mb-3">
+                        {step.title}
+                      </h3>
+                      <p className="text-secondary-600 leading-relaxed">
+                        {step.description}
+                      </p>
+                    </CardContent>
+                  </Card>
+                </div>
+              );
+            })}
           </div>
         </div>
       </section>
 
-      {/* Features */}
-      <section className="py-20">
+      {/* Features Section */}
+      <section className="py-20 lg:py-28 gradient-ecommerce-light">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-16">
-            <h2 className="text-3xl font-bold text-gray-900 mb-4">Tính Năng Chính</h2>
-            <p className="text-lg text-gray-600 max-w-2xl mx-auto">
-              Mọi thứ bạn cần để dự đoán và phân tích hành vi mua lại của khách hàng
+            <span className="inline-flex items-center gap-2 px-3 py-1 bg-white text-primary-700 rounded-full text-sm font-medium mb-4 shadow-sm">
+              <Award className="w-4 h-4" />
+              Tính năng nổi bật
+            </span>
+            <h2 className="text-3xl lg:text-4xl font-bold text-secondary-900 mb-4">
+              Giải Pháp Toàn Diện Cho E-commerce
+            </h2>
+            <p className="text-lg text-secondary-600 max-w-2xl mx-auto">
+              Mọi công cụ bạn cần để dự đoán và phân tích hành vi khách hàng
             </p>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
             {features.map((feature, index) => {
               const Icon = feature.icon;
               return (
-                <Card key={index} className="hover:shadow-lg transition-shadow">
+                <Card
+                  key={index}
+                  className="card-hover border-0 shadow-lg shadow-secondary-100/50 bg-white"
+                >
                   <CardContent className="p-6">
-                    <div className="w-12 h-12 bg-primary-100 rounded-lg flex items-center justify-center mb-4">
-                      <Icon className="w-6 h-6 text-primary-600" />
+                    <div className={`w-14 h-14 ${feature.color} rounded-2xl flex items-center justify-center mb-5`}>
+                      <Icon className="w-7 h-7" />
                     </div>
-                    <h3 className="text-lg font-semibold text-gray-900 mb-2">
+                    <h3 className="text-lg font-bold text-secondary-900 mb-3">
                       {feature.title}
                     </h3>
-                    <p className="text-gray-600">{feature.description}</p>
+                    <p className="text-secondary-600 leading-relaxed text-sm">
+                      {feature.description}
+                    </p>
                   </CardContent>
                 </Card>
               );
@@ -186,56 +295,55 @@ export default function HomePage() {
       </section>
 
       {/* CTA Section */}
-      <section className="py-20 bg-gray-900 text-white">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-          <h2 className="text-3xl font-bold mb-6">Sẵn sàng Bắt đầu Dự đoán?</h2>
-          <p className="text-xl text-gray-400 mb-10 max-w-2xl mx-auto">
-            Tham gia cùng các doanh nghiệp sử dụng AI để tối ưu chiến lược giữ chân khách hàng
+      <section className="py-20 lg:py-28 gradient-navy relative overflow-hidden">
+        {/* Background Decoration */}
+        <div className="absolute inset-0 bg-[url('data:image/svg+xml,%3Csvg%20width%3D%2260%22%20height%3D%2260%22%20viewBox%3D%220%200%2060%2060%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%3Cg%20fill%3D%22none%22%20fill-rule%3D%22evenodd%22%3E%3Cg%20fill%3D%22%23ffffff%22%20fill-opacity%3D%220.02%22%3E%3Cpath%20d%3D%22M36%2034v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6%2034v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6%204V0H4v4H0v2h4v4h2V6h4V4H6z%22%2F%3E%3C%2Fg%3E%3C%2Fg%3E%3C%2Fsvg%3E')]" />
+        
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center relative z-10">
+          <div className="inline-flex items-center gap-2 px-4 py-2 bg-white/10 rounded-full text-sm font-medium text-white mb-8">
+            <Target className="w-4 h-4" />
+            Bắt đầu ngay hôm nay
+          </div>
+          
+          <h2 className="text-3xl lg:text-5xl font-bold text-white mb-6">
+            Sẵn sàng Tối Ưu Chiến Lược
+            <br />
+            <span className="text-amber-400">Giữ Chân Khách Hàng?</span>
+          </h2>
+          
+          <p className="text-lg lg:text-xl text-white/70 mb-10 max-w-2xl mx-auto">
+            Tham gia cùng các doanh nghiệp TMĐT hàng đầu đang sử dụng AI 
+            để dự đoán hành vi khách hàng và tăng trưởng doanh thu
           </p>
+          
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
             <Link href="/apply">
-              <Button size="lg" className="bg-primary-600 hover:bg-primary-700">
-                Thực hiện Dự đoán Đầu tiên
-                <ArrowRight className="w-5 h-5 ml-2" />
+              <Button 
+                size="lg" 
+                className="bg-primary-500 hover:bg-primary-600 btn-ecommerce gap-2 px-8 text-lg"
+              >
+                <Play className="w-5 h-5" />
+                Thực hiện Dự đoán
               </Button>
             </Link>
           </div>
 
-          <div className="mt-12 flex flex-wrap justify-center gap-8 text-sm text-gray-400">
+          <div className="mt-12 flex flex-wrap justify-center gap-8 text-sm text-white/60">
             <div className="flex items-center gap-2">
-              <CheckCircle2 className="w-5 h-5 text-success-500" />
+              <CheckCircle2 className="w-5 h-5 text-emerald-400" />
               <span>Không cần thẻ tín dụng</span>
             </div>
             <div className="flex items-center gap-2">
-              <CheckCircle2 className="w-5 h-5 text-success-500" />
-              <span>Miễn phí sử dụng</span>
+              <CheckCircle2 className="w-5 h-5 text-emerald-400" />
+              <span>Miễn phí hoàn toàn</span>
             </div>
             <div className="flex items-center gap-2">
-              <CheckCircle2 className="w-5 h-5 text-success-500" />
+              <CheckCircle2 className="w-5 h-5 text-emerald-400" />
               <span>Kết quả tức thì</span>
             </div>
           </div>
         </div>
       </section>
     </div>
-  );
-}
-
-function SparklesIcon({ className }: { className?: string }) {
-  return (
-    <svg
-      className={className}
-      fill="none"
-      stroke="currentColor"
-      viewBox="0 0 24 24"
-      xmlns="http://www.w3.org/2000/svg"
-    >
-      <path
-        strokeLinecap="round"
-        strokeLinejoin="round"
-        strokeWidth={2}
-        d="M5 3v4M3 5h4M6 17v4m-2-2h4m5-16l2.286 6.857L21 12l-5.714 2.143L13 21l-2.286-6.857L5 12l5.714-2.143L13 3z"
-      />
-    </svg>
   );
 }

@@ -7,8 +7,8 @@ import { Footer } from '@/components/layout/Footer';
 const inter = Inter({ subsets: ['latin'] });
 
 export const metadata: Metadata = {
-  title: 'Olist Repurchase Prediction',
-  description: 'AI-powered customer repurchase prediction for e-commerce',
+  title: 'AI Predict - Dự Đoán Mua Lại',
+  description: 'Giải pháp AI dự đoán hành vi mua lại của khách hàng',
 };
 
 export default function RootLayout({
@@ -17,11 +17,11 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en">
+    <html lang="vi">
       <body className={inter.className}>
         <div className="flex flex-col min-h-screen">
           <Navbar />
-          <main className="flex-grow bg-gray-50">{children}</main>
+          <main className="flex-grow">{children}</main>
           <Footer />
         </div>
       </body>
