@@ -16,7 +16,9 @@ export function FeatureImportanceChart({ reasons, height = 220 }: FeatureImporta
     .map((reason) => ({
       name: formatFeatureName(reason.feature),
       value: Math.max(0, Math.min(100, reason.importance_percent)),
+      rawValue: reason.value,
       rawName: reason.feature,
+      impact: reason.impact,
     }));
 
   if (data.length === 0) {
@@ -48,7 +50,7 @@ export function FeatureImportanceChart({ reasons, height = 220 }: FeatureImporta
         <BarChart
           data={data}
           layout="vertical"
-          margin={{ top: 10, right: 60, left: 20, bottom: 10 }}
+          margin={{ top: 10, right: 120, left: 20, bottom: 10 }}
         >
               <XAxis
                 type="number"
@@ -79,8 +81,34 @@ export function FeatureImportanceChart({ reasons, height = 220 }: FeatureImporta
                 <LabelList
                   dataKey="value"
                   position="right"
-                  formatter={(value: number) => `${value.toFixed(0)}%`}
-                  style={{ fontSize: 13, fill: '#374151', fontWeight: 600 }}
+                  content={(props: any) => {
+                    const { x, y, width, value, name } = props;
+                    // Tìm rawValue và impact từ data array dựa vào name
+                    const dataItem = data.find(d => d.name === name);
+                    const rawValue = dataItem?.rawValue;
+                    const impact = dataItem?.impact;
+                    
+                    // Icon cho chiều hướng
+                    const impactIcon = impact === 'positive' ? '↑' : impact === 'negative' ? '↓' : '';
+                    const impactColor = impact === 'positive' ? '#22c55e' : impact === 'negative' ? '#ef4444' : '#374151';
+                    
+                    const label = rawValue !== undefined 
+                      ? `${value.toFixed(0)}% (${rawValue})`
+                      : `${value.toFixed(0)}%`;
+                    
+                    return (
+                      <g>
+                        <text x={(x || 0) + (width || 0) + 5} y={(y || 0) + 16} fill="#374151" fontSize={13} fontWeight={600}>
+                          {label}
+                        </text>
+                        {impactIcon && (
+                          <text x={(x || 0) + (width || 0) + 5 + label.length * 7 + 5} y={(y || 0) + 16} fill={impactColor} fontSize={14} fontWeight={700}>
+                            {impactIcon}
+                          </text>
+                        )}
+                      </g>
+                    );
+                  }}
                 />
                 {data.map((entry, index) => (
                   <Cell key={`cell-${index}`} fill={getBarColor(index)} />
@@ -95,33 +123,29 @@ export function FeatureImportanceChart({ reasons, height = 220 }: FeatureImporta
 // Format feature name for display
 function formatFeatureName(name: string): string {
   const nameMap: Record<string, string> = {
-    'recency_days': 'Ngày từ lần cuối',
-    'tenure_days': 'Thâm niên khách',
-    'cnt_L1M_orders': 'Số đơn 1 tháng',
-    'cnt_L3M_orders': 'Số đơn 3 tháng',
-    'cnt_L5M_orders': 'Số đơn 5 tháng',
-    'sum_L1M_value': 'Chi tiêu 1 tháng',
-    'sum_L3M_value': 'Chi tiêu 3 tháng',
-    'sum_L5M_value': 'Chi tiêu 5 tháng',
-    'avg_L1M_value': 'AOV 1 tháng',
-    'avg_L3M_value': 'AOV 3 tháng',
-    'avg_L5M_value': 'AOV 5 tháng',
     'active_months_L5M': 'Tháng hoạt động',
-    'cancel_rate_L1M': 'Tỷ lệ hủy 1 tháng',
-    'cancel_rate_L3M': 'Tỷ lệ hủy 3 tháng',
-    'spend_velocity': 'Tốc độ chi tiêu',
-    'order_acceleration': 'Gia tốc đặt đơn',
-    'recency_loyalty_score': 'Điểm gắn bó',
-    'is_UK': 'Khách UK',
-    'success_order_rate': 'Tỷ lệ đơn thành công',
-    'global_cancel_val_ratio': 'Tỷ lệ hủy toàn phần',
-    'last_order_canceled': 'Đơn cuối bị hủy',
+    'cnt_L3M_orders': 'Số đơn 3 tháng',
+    'sum_L1M_value': 'Chi tiêu 1 tháng',
+    'cnt_L1M_orders': 'Số đơn 1 tháng',
+    'sum_L3M_value': 'Chi tiêu 3 tháng',
     'avg_gap_L5M': 'Chu kỳ mua TB',
-    'cv_L5M_value': 'Độ biến động chi tiêu',
+    'tenure_days': 'Thâm niên khách',
+    'order_velocity': 'Tần suất mua theo thâm niên',
+    'std_L1M_value': 'Độ lệch chi tiêu 1 tháng',
+    'cancel_rate_L5M': 'Tỷ lệ hủy 5 tháng',
+    'recency_days': 'Ngày từ lần cuối',
+    'sum_L5M_items_log': 'Tổng log items 5 tháng',
+    'avg_items_per_cat_L3M': 'TB items/category 3 tháng',
+    'success_order_rate': 'Tỷ lệ đơn thành công',
+    'avg_L5M_items_log': 'TB log items 5 tháng',
+    'avg_items_per_cat_L5M': 'TB items/category 5 tháng',
+    'avg_L5M_value': 'AOV 5 tháng',
+    'sum_L3M_items_log': 'Tổng log items 3 tháng',
     'last_order_intensity': 'Cường độ đơn cuối',
-    'avg_items_per_cat_L5M': 'Độ đa dạng mua',
-    'order_velocity': 'Tần suất mua/Tuổi',
-    'std_L5M_value': 'Độ lệch chi tiêu',
+    'avg_L3M_items_log': 'TB log items 3 tháng',
+    'spend_velocity': 'Tốc độ chi tiêu',
+    'avg_L3M_skus': 'TB SKU 3 tháng',
+    'avg_L1M_value': 'AOV 1 tháng',
   };
 
   if (nameMap[name]) {

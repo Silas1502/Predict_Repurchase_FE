@@ -51,6 +51,7 @@ export interface TopReason {
   feature: string;
   importance_percent: number;
   value: number;
+  impact?: 'positive' | 'negative';
 }
 
 /** Response từ POST /predict - PredictResponse */
