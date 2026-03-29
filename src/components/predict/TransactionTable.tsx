@@ -137,8 +137,11 @@ export function TransactionTable({ transactions, onChange, disabled }: Transacti
                 <th className="px-2 py-3 text-center text-xs font-semibold text-secondary-600 uppercase tracking-wider whitespace-nowrap w-20" title="Order Value">
                   Value
                 </th>
+                <th className="px-2 py-3 text-center text-xs font-semibold text-secondary-600 uppercase tracking-wider whitespace-nowrap w-20" title="Is Canceled (0/1)">
+                  Hủy
+                </th>
                 <th className="px-2 py-3 text-center text-xs font-semibold text-secondary-600 uppercase tracking-wider whitespace-nowrap w-20" title="Canceled Value">
-                  Canceled
+                  Tiền Hủy
                 </th>
                 <th className="px-2 py-3 text-center text-xs font-semibold text-secondary-600 uppercase tracking-wider whitespace-nowrap w-20" title="Country">
                   Country
@@ -214,15 +217,25 @@ export function TransactionTable({ transactions, onChange, disabled }: Transacti
                     />
                   </td>
                   <td className="px-2 py-2 w-20">
+                    <select
+                      value={transaction.is_canceled}
+                      onChange={(e) => updateRow(index, 'is_canceled', parseInt(e.target.value))}
+                      disabled={disabled}
+                      className="w-full h-9 px-2 text-sm border border-secondary-200 rounded-lg bg-white focus:border-primary-500 focus:ring-1 focus:ring-primary-500 outline-none"
+                    >
+                      <option value={0}>0 - Không</option>
+                      <option value={1}>1 - Có</option>
+                    </select>
+                  </td>
+                  <td className="px-2 py-2 w-20">
                     <Input
                       type="number"
                       step="0.01"
                       min={0}
                       value={transaction.canceled_value || ''}
                       onChange={(e) => updateRow(index, 'canceled_value', e.target.value === '' ? 0 : parseFloat(e.target.value))}
-                      onBlur={(e) => handleBlur(index, 'canceled_value', e.target.value)}
-                      error={errors[`${index}-canceled_value`]}
                       disabled={disabled}
+                      placeholder="0.00"
                       className="text-sm min-w-0"
                     />
                   </td>
@@ -267,7 +280,7 @@ export function TransactionTable({ transactions, onChange, disabled }: Transacti
               ))}
               {transactions.length === 0 && (
                 <tr>
-                  <td colSpan={9} className="px-4 py-8 text-center text-secondary-500">
+                  <td colSpan={10} className="px-4 py-8 text-center text-secondary-500">
                     Chưa có giao dịch. Nhấn &quot;Thêm Đơn&quot; để bắt đầu.
                   </td>
                 </tr>

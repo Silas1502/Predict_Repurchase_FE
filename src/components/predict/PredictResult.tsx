@@ -4,6 +4,7 @@ import { PredictResponse } from '@/types';
 import { Badge } from '@/components/ui/Badge';
 import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/Card';
 import { GaugeChart } from './GaugeChart';
+import { FeatureImportanceChart } from './FeatureImportanceChart';
 import { CheckCircle2, XCircle, TrendingUp, AlertCircle } from 'lucide-react';
 
 interface PredictResultProps {
@@ -59,12 +60,6 @@ export function PredictResult({ result, isLoading }: PredictResultProps) {
     }
   };
 
-  // Format feature name for display
-  const formatFeatureName = (name: string) => {
-    return name
-      .replace(/_/g, ' ')
-      .replace(/\b\w/g, (l) => l.toUpperCase());
-  };
 
   return (
     <Card className="h-full">
@@ -104,37 +99,10 @@ export function PredictResult({ result, isLoading }: PredictResultProps) {
           </Badge>
         </div>
 
-        {/* Top Reasons */}
+        {/* Top Reasons - Horizontal Bar Chart */}
         {top_reasons && top_reasons.length > 0 && (
           <div className="border-t pt-4">
-            <h4 className="text-sm font-semibold text-gray-900 mb-3">
-              Top 3 Yếu tố Ảnh hưởng đến Dự đoán này
-            </h4>
-            <div className="space-y-3">
-              {top_reasons.map((reason, index) => (
-                <div
-                  key={index}
-                  className="flex items-center justify-between p-3 bg-gray-50 rounded-lg"
-                >
-                  <div className="flex items-center gap-3">
-                    <span className="flex items-center justify-center w-6 h-6 rounded-full bg-primary-100 text-primary-700 text-xs font-medium">
-                      {index + 1}
-                    </span>
-                    <div>
-                      <p className="font-medium text-gray-900">
-                        {formatFeatureName(reason.feature)}
-                      </p>
-                    </div>
-                  </div>
-                  <div className="text-right">
-                    <span className="text-sm font-semibold text-primary-600">
-                      {reason.importance_percent.toFixed(1)}%
-                    </span>
-                    <p className="text-xs text-gray-400">ảnh hưởng</p>
-                  </div>
-                </div>
-              ))}
-            </div>
+            <FeatureImportanceChart reasons={top_reasons} height={160} />
           </div>
         )}
 
