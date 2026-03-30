@@ -212,7 +212,7 @@ export default function HistoryPage() {
                 </div>
               </div>
               {!isLoading && total > 0 && (
-                <span className="text-sm text-secondary-500 bg-secondary-100 px-3 py-1 rounded-full">
+                <span className="text-sm text-secondary-500 bg-secondary-100 px-3 py-1 rounded-full whitespace-nowrap">
                   Trang {page} / {totalPages}
                 </span>
               )}

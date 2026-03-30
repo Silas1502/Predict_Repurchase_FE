@@ -1252,6 +1252,12 @@ video {
 .pb-3 {
   padding-bottom: 0.75rem;
 }
+.pl-3 {
+  padding-left: 0.75rem;
+}
+.pr-2 {
+  padding-right: 0.5rem;
+}
 .pt-0 {
   padding-top: 0px;
 }
@@ -1260,12 +1266,6 @@ video {
 }
 .pt-4 {
   padding-top: 1rem;
-}
-.pl-3 {
-  padding-left: 0.75rem;
-}
-.pr-2 {
-  padding-right: 0.5rem;
 }
 .text-left {
   text-align: left;
