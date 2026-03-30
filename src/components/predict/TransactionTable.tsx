@@ -105,21 +105,21 @@ export function TransactionTable({ transactions, onChange, disabled }: Transacti
 
   return (
     <Card>
-      <CardHeader className="flex flex-row items-center justify-between">
+      <CardHeader className="flex flex-row items-end justify-between">
         <div>
           <CardTitle>Lịch Sử Giao Dịch</CardTitle>
           <p className="text-sm text-secondary-500 mt-1">
             Nhập lịch sử đơn hàng của khách hàng (tối thiểu 5 tháng để dự đoán chính xác)
           </p>
         </div>
-        <Button onClick={addRow} disabled={disabled} size="sm">
+        <Button onClick={addRow} disabled={disabled} size="sm" className="mb-1">
           <Plus className="w-4 h-4 mr-1" />
           Thêm Đơn
         </Button>
       </CardHeader>
       <CardContent className="p-0">
-        <div className="w-full">
-          <table className="w-full table-fixed">
+        <div className="w-full overflow-x-auto">
+          <table className="w-full table-fixed min-w-[600px]">
             <thead className="bg-secondary-50 border-b border-secondary-200">
               <tr>
                 <th className="px-2 py-3 text-center text-xs font-semibold text-secondary-600 uppercase tracking-wider whitespace-nowrap w-24" title="Order ID">
@@ -128,10 +128,10 @@ export function TransactionTable({ transactions, onChange, disabled }: Transacti
                 <th className="px-2 py-3 text-center text-xs font-semibold text-secondary-600 uppercase tracking-wider whitespace-nowrap w-16" title="Total Items">
                   Items
                 </th>
-                <th className="px-2 py-3 text-center text-xs font-semibold text-secondary-600 uppercase tracking-wider whitespace-nowrap w-16" title="Number of Categories">
-                  Categories
+                <th className="px-2 py-3 text-center text-xs font-semibold text-secondary-600 uppercase tracking-wider whitespace-nowrap w-14" title="Number of Categories">
+                  Categ.
                 </th>
-                <th className="px-2 py-3 text-center text-xs font-semibold text-secondary-600 uppercase tracking-wider whitespace-nowrap w-14" title="Number of Lines">
+                <th className="pl-3 pr-2 py-3 text-center text-xs font-semibold text-secondary-600 uppercase tracking-wider whitespace-nowrap w-14" title="Number of Lines">
                   Lines
                 </th>
                 <th className="px-2 py-3 text-center text-xs font-semibold text-secondary-600 uppercase tracking-wider whitespace-nowrap w-20" title="Order Value">
@@ -180,7 +180,7 @@ export function TransactionTable({ transactions, onChange, disabled }: Transacti
                       className="text-sm min-w-0"
                     />
                   </td>
-                  <td className="px-2 py-2 w-16">
+                  <td className="px-2 py-2 w-14">
                     <Input
                       type="number"
                       min={1}
@@ -192,7 +192,7 @@ export function TransactionTable({ transactions, onChange, disabled }: Transacti
                       className="text-sm min-w-0"
                     />
                   </td>
-                  <td className="px-2 py-2 w-14">
+                  <td className="pl-3 pr-2 py-2 w-14">
                     <Input
                       type="number"
                       min={1}

@@ -803,6 +803,9 @@ video {
 .min-w-\[280px\] {
   min-width: 280px;
 }
+.min-w-\[600px\] {
+  min-width: 600px;
+}
 .max-w-2xl {
   max-width: 42rem;
 }
@@ -862,6 +865,9 @@ video {
 }
 .items-start {
   align-items: flex-start;
+}
+.items-end {
+  align-items: flex-end;
 }
 .items-center {
   align-items: center;
@@ -1254,6 +1260,12 @@ video {
 }
 .pt-4 {
   padding-top: 1rem;
+}
+.pl-3 {
+  padding-left: 0.75rem;
+}
+.pr-2 {
+  padding-right: 0.5rem;
 }
 .text-left {
   text-align: left;
