@@ -26,28 +26,28 @@ import {
 
 export default function HistoryPage() {
   const [predictions, setPredictions] = useState<ApplicationLog[]>([]);
+  const [allPredictions, setAllPredictions] = useState<ApplicationLog[]>([]); // Tất cả để tính stats
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState('');
   const [page, setPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
   const [total, setTotal] = useState(0);
-  const [pageSize, setPageSize] = useState(10);  // Backend mặc định 20
+  const [pageSize, setPageSize] = useState(10);
+  const [statsLoading, setStatsLoading] = useState(false);
 
   const fetchHistory = async (pageNum: number = page) => {
     setIsLoading(true);
     setError('');
 
     try {
-      // Backend dùng 'page' và 'page_size' thay vì 'limit'
+      // Lấy dữ liệu trang hiện tại
       const response = await getPredictionHistory({ page: pageNum, page_size: pageSize });
       
-      // Backend trả về ApplicationsListResponse trực tiếp
       if (response.success) {
         setPredictions(response.data);
         setTotal(response.count);
         setPage(response.page);
         setPageSize(response.page_size);
-        // Tính total_pages từ count và page_size
         setTotalPages(Math.ceil(response.count / response.page_size));
       } else {
         setError('Không thể tải lịch sử');
@@ -59,8 +59,25 @@ export default function HistoryPage() {
     }
   };
 
+  // Fetch tất cả để tính stats (chỉ 1 lần khi load)
+  const fetchAllForStats = async () => {
+    setStatsLoading(true);
+    try {
+      // Backend giới hạn page_size max = 100
+      const response = await getPredictionHistory({ page: 1, page_size: 100 });
+      if (response.success) {
+        setAllPredictions(response.data);
+      }
+    } catch (err) {
+      console.error('Lỗi tải stats:', err);
+    } finally {
+      setStatsLoading(false);
+    }
+  };
+
   useEffect(() => {
     fetchHistory(1);
+    fetchAllForStats(); // Tải tất cả để tính stats
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
@@ -132,8 +149,8 @@ export default function HistoryPage() {
           </div>
         )}
 
-        {/* Stats Cards */}
-        {!isLoading && predictions.length > 0 && (
+        {/* Stats Cards - Dùng allPredictions để tính toàn bộ */}
+        {total > 0 && (
           <div className="mb-8 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
             <Card className="border-0 shadow-lg shadow-secondary-100/50">
               <CardContent className="p-5">
@@ -157,7 +174,9 @@ export default function HistoryPage() {
                   <div>
                     <p className="text-sm text-secondary-500">Tỷ lệ Mua lại</p>
                     <p className="text-2xl font-bold text-emerald-600">
-                      {((predictions.filter((p) => p.is_repurchase).length / predictions.length) * 100).toFixed(1)}%
+                      {allPredictions.length > 0 
+                        ? ((allPredictions.filter((p) => p.is_repurchase).length / allPredictions.length) * 100).toFixed(1)
+                        : ((predictions.filter((p) => p.is_repurchase).length / predictions.length) * 100).toFixed(1)}%
                     </p>
                   </div>
                 </div>
@@ -172,7 +191,9 @@ export default function HistoryPage() {
                   <div>
                     <p className="text-sm text-secondary-500">Tiềm năng Cao</p>
                     <p className="text-2xl font-bold text-amber-600">
-                      {predictions.filter((p) => p.potential_level === 'Nhóm Khách hàng Tự hành').length}
+                      {allPredictions.length > 0 
+                        ? allPredictions.filter((p) => p.potential_level === 'Nhóm Khách hàng Tự hành').length
+                        : predictions.filter((p) => p.potential_level === 'Nhóm Khách hàng Tự hành').length}
                     </p>
                   </div>
                 </div>
@@ -187,7 +208,9 @@ export default function HistoryPage() {
                   <div>
                     <p className="text-sm text-secondary-500">Trung bình</p>
                     <p className="text-2xl font-bold text-violet-600">
-                      {(predictions.reduce((acc, p) => acc + p.probability, 0) / predictions.length * 100).toFixed(1)}%
+                      {allPredictions.length > 0 
+                        ? (allPredictions.reduce((acc, p) => acc + p.probability, 0) / allPredictions.length * 100).toFixed(1)
+                        : (predictions.reduce((acc, p) => acc + p.probability, 0) / predictions.length * 100).toFixed(1)}%
                     </p>
                   </div>
                 </div>

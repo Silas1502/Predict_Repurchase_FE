@@ -82,30 +82,50 @@ export function FeatureImportanceChart({ reasons, height = 220 }: FeatureImporta
                   dataKey="value"
                   position="right"
                   content={(props: any) => {
-                    const { x, y, width, value, name } = props;
-                    // Tìm rawValue và impact từ data array dựa vào name
-                    const dataItem = data.find(d => d.name === name);
+                    const { x, y, width, value, index } = props;
+                    const dataItem = data[index];
                     const rawValue = dataItem?.rawValue;
                     const impact = dataItem?.impact;
                     
-                    // Icon cho chiều hướng
-                    const impactIcon = impact === 'positive' ? '↑' : impact === 'negative' ? '↓' : '';
-                    const impactColor = impact === 'positive' ? '#22c55e' : impact === 'negative' ? '#ef4444' : '#374151';
+                    // Icon và màu cho chiều hướng
+                    const isPositive = impact === 'positive';
+                    const isNegative = impact === 'negative';
+                    const arrowIcon = isPositive ? '↑' : isNegative ? '↓' : '•';
+                    const arrowColor = isPositive ? '#16a34a' : isNegative ? '#dc2626' : '#6b7280';
+                    const arrowBg = isPositive ? '#dcfce7' : isNegative ? '#fee2e2' : '#f3f4f6';
                     
                     const label = rawValue !== undefined 
                       ? `${value.toFixed(0)}% (${rawValue})`
                       : `${value.toFixed(0)}%`;
                     
+                    const baseX = (x || 0) + (width || 0) + 8;
+                    const baseY = (y || 0) + 12;
+                    
                     return (
                       <g>
-                        <text x={(x || 0) + (width || 0) + 5} y={(y || 0) + 16} fill="#374151" fontSize={13} fontWeight={600}>
+                        {/* Label chính */}
+                        <text x={baseX} y={baseY + 5} fill="#374151" fontSize={12} fontWeight={600}>
                           {label}
                         </text>
-                        {impactIcon && (
-                          <text x={(x || 0) + (width || 0) + 5 + label.length * 7 + 5} y={(y || 0) + 16} fill={impactColor} fontSize={14} fontWeight={700}>
-                            {impactIcon}
-                          </text>
-                        )}
+                        {/* Mũi tên trong circle */}
+                        <circle 
+                          cx={baseX + label.length * 6 + 12} 
+                          cy={baseY + 2} 
+                          r={9} 
+                          fill={arrowBg}
+                          stroke={arrowColor}
+                          strokeWidth={1.5}
+                        />
+                        <text 
+                          x={baseX + label.length * 6 + 12} 
+                          y={baseY + 6} 
+                          fill={arrowColor} 
+                          fontSize={11} 
+                          fontWeight={700}
+                          textAnchor="middle"
+                        >
+                          {arrowIcon}
+                        </text>
                       </g>
                     );
                   }}
@@ -130,8 +150,8 @@ function formatFeatureName(name: string): string {
     'sum_L3M_value': 'Chi tiêu 3 tháng',
     'avg_gap_L5M': 'Chu kỳ mua TB',
     'tenure_days': 'Thâm niên khách',
-    'order_velocity': 'Tần suất mua theo thâm niên',
     'std_L1M_value': 'Độ lệch chi tiêu 1 tháng',
+    'std_L3M_value': 'Độ lệch chi tiêu 3 tháng',
     'cancel_rate_L5M': 'Tỷ lệ hủy 5 tháng',
     'recency_days': 'Ngày từ lần cuối',
     'sum_L5M_items_log': 'Tổng log items 5 tháng',

@@ -23,19 +23,6 @@ import {
   Brain
 } from 'lucide-react';
 
-const emptyTransaction: Transaction = {
-  order_id: '',
-  total_items: 0,
-  log_items: 0,
-  order_date: '',
-  order_value: 0,
-  canceled_value: 0,
-  order_n_categories: 0,
-  order_n_lines: 0,
-  is_canceled: 0,
-  country: '',
-};
-
 export default function ApplyPage() {
   const [customerId, setCustomerId] = useState('');
   const [snapshotDate, setSnapshotDate] = useState(new Date().toISOString().split('T')[0]);
@@ -57,17 +44,39 @@ export default function ApplyPage() {
       setError('Vui lòng chọn ngày snapshot');
       return false;
     }
+    
+    // Kiểm tra có giao dịch để dự đoán không
     if (transactions.length === 0) {
-      setError('Cần ít nhất một giao dịch');
+      setError('Không có giao dịch để dự đoán. Vui lòng lấy lịch sử trước.');
       return false;
     }
-    for (let i = 0; i < transactions.length; i++) {
-      const t = transactions[i];
-      if (!t.order_id || !t.order_date) {
-        setError(`Giao dịch ${i + 1} thiếu thông tin bắt buộc (Mã đơn hoặc Ngày đặt)`);
+
+    // Chỉ cho phép dự đoán khi đã fetch từ DB
+    if (allTransactions.length === 0) {
+      setError('Vui lòng nhấn "Lấy Lịch Sử" để tải dữ liệu giao dịch');
+      return false;
+    }
+
+    // Kiểm tra ngày đặt không được sau snapshot_date
+    const snapshot = new Date(snapshotDate);
+    for (let i = 0; i < allTransactions.length; i++) {
+      const t = allTransactions[i];
+      const orderDate = new Date(t.order_date);
+      if (orderDate > snapshot) {
+        setError(`Giao dịch ${i + 1} (Order ID: ${t.order_id}): Ngày đặt (${t.order_date}) không được sau ngày snapshot (${snapshotDate})`);
         return false;
       }
     }
+    
+    // Cảnh báo nếu không có đơn nào trong 5 tháng gần nhất (không block)
+    const minDate = new Date(snapshot);
+    minDate.setMonth(minDate.getMonth() - 5);
+    const hasRecentData = transactions.some(t => new Date(t.order_date) >= minDate);
+    
+    if (!hasRecentData) {
+      console.warn('Cảnh báo: Không có đơn hàng nào trong 5 tháng gần nhất. Độ chính xác có thể giảm.');
+    }
+    
     return true;
   };
 
@@ -128,6 +137,10 @@ export default function ApplyPage() {
 
     setIsFetching(true);
     setFetchError('');
+    // Reset dữ liệu cũ để load mới
+    setTransactions([]);
+    setAllTransactions([]);
+    setResult(null);
 
     try {
       const response = await fetchCustomerHistory(customerId.trim());
@@ -146,15 +159,41 @@ export default function ApplyPage() {
         }));
 
         const snapshot = new Date(snapshotDate);
+        
+        // Lọc chỉ lấy đơn <= snapshot date (không lấy đơn tương lai)
+        const validTransactions = fetchedTransactions.filter((t) => {
+          const transactionDate = new Date(t.order_date);
+          return transactionDate <= snapshot;
+        });
+        
+        // Thông báo nếu không có giao dịch nào trước ngày snapshot
+        if (validTransactions.length === 0) {
+          setFetchError(`Không có giao dịch nào trước ngày ${snapshotDate}. Vui lòng chọn ngày snapshot khác.`);
+          setIsFetching(false);
+          return;
+        }
+        
+        if (validTransactions.length < fetchedTransactions.length) {
+          const futureCount = fetchedTransactions.length - validTransactions.length;
+          console.log(`${futureCount} giao dịch sau ngày snapshot đã bị loại bỏ`);
+        }
+        
         const startDate = new Date(snapshot);
         startDate.setMonth(startDate.getMonth() - 5);
 
-        const filteredTransactions = fetchedTransactions.filter((t) => {
+        const filteredTransactions = validTransactions.filter((t) => {
           const transactionDate = new Date(t.order_date);
-          return transactionDate <= snapshot && transactionDate >= startDate;
+          return transactionDate >= startDate;
         });
+        
+        // Thông báo nếu không có giao dịch nào trong 5 tháng gần nhất
+        if (filteredTransactions.length === 0) {
+          setFetchError(`Không có giao dịch nào trong 5 tháng gần ${snapshotDate}. Vui lòng chọn ngày snapshot khác.`);
+          setIsFetching(false);
+          return;
+        }
 
-        setAllTransactions(fetchedTransactions);
+        setAllTransactions(validTransactions);
         setTransactions(filteredTransactions);
 
         if (filteredTransactions.length < fetchedTransactions.length) {
@@ -211,7 +250,7 @@ export default function ApplyPage() {
       <div className="max-w-full mx-auto px-4 sm:px-6 lg:px-8 py-8">
         {/* Error Alert */}
         {error && (
-          <div className="mb-6 p-4 bg-rose-50 border border-rose-200 rounded-xl flex items-center gap-3 text-rose-700 animate-slide-up">
+          <div className="max-w-6xl mx-auto mb-6 p-4 bg-rose-50 border border-rose-200 rounded-xl flex items-center gap-3 text-rose-700 animate-slide-up">
             <AlertCircle className="w-5 h-5 flex-shrink-0" />
             <span>{error}</span>
           </div>
@@ -266,10 +305,12 @@ export default function ApplyPage() {
                     </Button>
                   </div>
                   {fetchError && (
-                    <p className="text-sm text-rose-600 flex items-center gap-1">
-                      <AlertCircle className="w-3 h-3" />
-                      {fetchError}
-                    </p>
+                    <div className="mt-2 p-2 bg-rose-50 border border-rose-200 rounded-lg">
+                      <p className="text-sm text-rose-600 flex items-center gap-1.5">
+                        <AlertCircle className="w-4 h-4 flex-shrink-0" />
+                        {fetchError}
+                      </p>
+                    </div>
                   )}
                 </div>
 
@@ -294,13 +335,9 @@ export default function ApplyPage() {
             </CardContent>
           </Card>
 
-          {/* Transaction Table */}
+          {/* Transaction List */}
           <div className="max-w-6xl mx-auto">
-            <TransactionTable
-              transactions={transactions}
-              onChange={setTransactions}
-              disabled={isLoading}
-            />
+            <TransactionTable transactions={transactions} />
           </div>
 
           {/* Action Buttons - Centered */}
