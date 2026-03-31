@@ -168,9 +168,7 @@ export default function HomePage() {
                 return (
                   <div
                     key={index}
-                    className={`glass rounded-2xl p-6 text-center animate-slide-up ${
-                      index % 2 === 1 ? 'mt-8' : ''
-                    }`}
+                    className="glass rounded-2xl p-6 text-center animate-slide-up h-full flex flex-col justify-center"
                     style={{ animationDelay: `${index * 100}ms` }}
                   >
                     <div className="w-12 h-12 bg-white/20 rounded-xl flex items-center justify-center mx-auto mb-3">
