@@ -1,14 +1,25 @@
 'use client';
 
 import { BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer, Cell, LabelList } from 'recharts';
-import { TopReason } from '@/types';
+import { TopReason, Transaction } from '@/types';
 
 interface FeatureImportanceChartProps {
   reasons: TopReason[];
+  transactions?: Transaction[];
   height?: number;
 }
 
-export function FeatureImportanceChart({ reasons, height = 220 }: FeatureImportanceChartProps) {
+export function FeatureImportanceChart({ reasons, transactions, height = 220 }: FeatureImportanceChartProps) {
+  // Debug log
+  console.log('FeatureImportanceChart:', { 
+    transactionsCount: transactions?.length,
+    logItems: transactions?.map(t => t.log_items)
+  });
+  
+  // Tính tổng log_items từ transactions nếu có
+  const calculatedSumLogItems = transactions?.reduce((sum, t) => sum + (t.log_items || 0), 0);
+  console.log('calculatedSumLogItems:', calculatedSumLogItems);
+  
   // Sort by importance (highest first) and format data
   const data = [...reasons]
     .sort((a, b) => b.importance_percent - a.importance_percent)
@@ -16,7 +27,9 @@ export function FeatureImportanceChart({ reasons, height = 220 }: FeatureImporta
     .map((reason) => ({
       name: formatFeatureName(reason.feature),
       value: Math.max(0, Math.min(100, reason.importance_percent)),
-      rawValue: reason.value,
+      rawValue: reason.feature === 'sum_L5M_items_log' && calculatedSumLogItems !== undefined 
+        ? calculatedSumLogItems 
+        : reason.value,
       rawName: reason.feature,
       impact: reason.impact,
     }));

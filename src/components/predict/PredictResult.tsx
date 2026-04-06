@@ -1,6 +1,6 @@
 'use client';
 
-import { PredictResponse } from '@/types';
+import { PredictResponse, Transaction } from '@/types';
 import { Badge } from '@/components/ui/Badge';
 import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/Card';
 import { GaugeChart } from './GaugeChart';
@@ -10,9 +10,18 @@ import { CheckCircle2, XCircle, TrendingUp, AlertCircle } from 'lucide-react';
 interface PredictResultProps {
   result: PredictResponse | null;
   isLoading?: boolean;
+  transactions?: Transaction[];
 }
 
-export function PredictResult({ result, isLoading }: PredictResultProps) {
+export function PredictResult({ result, isLoading, transactions }: PredictResultProps) {
+  // Debug log
+  if (result) {
+    console.log('PredictResult received:', {
+      probability: result.probability,
+      probability_percent: result.probability_percent,
+      top_reasons: result.top_reasons
+    });
+  }
   if (isLoading) {
     return (
       <Card className="h-full">
@@ -102,7 +111,7 @@ export function PredictResult({ result, isLoading }: PredictResultProps) {
         {/* Top Reasons - Horizontal Bar Chart */}
         {top_reasons && top_reasons.length > 0 && (
           <div className="border-t pt-4">
-            <FeatureImportanceChart reasons={top_reasons} height={160} />
+            <FeatureImportanceChart reasons={top_reasons} transactions={transactions} height={160} />
           </div>
         )}
 

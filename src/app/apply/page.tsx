@@ -98,11 +98,9 @@ export default function ApplyPage() {
     };
 
     try {
-      const txsToSend = (allTransactions.length > 0 ? allTransactions : transactions).map(t => ({
+      const txsToSend = transactions.map(t => ({
         ...t,
         order_date: formatDateToISO(t.order_date),
-        total_items: Math.abs(t.total_items),
-        log_items: t.log_items < 0 ? Math.abs(t.log_items) : t.log_items,
       }));
 
       const requestData = {
@@ -365,7 +363,7 @@ export default function ApplyPage() {
           {/* Result & Status - Below buttons */}
           <div className="grid md:grid-cols-2 gap-6 max-w-6xl mx-auto">
             <SystemStatus resetKey={resetKey} />
-            <PredictResult result={result} isLoading={isLoading} />
+            <PredictResult result={result} isLoading={isLoading} transactions={transactions} />
           </div>
         </div>
       </div>
